@@ -15,9 +15,17 @@ class MainActivity : AppCompatActivity() {
 
         val rudderClient = MainApplication.rudderClient
 
+        if (rudderClient != null) {
+            for (id in 1..2) {
+                val fullClassName = "com.rudderlabs.android.sample.kotlin.TC_00$id"
+                val cls = Class.forName(fullClassName)
+                val kotlinClass = cls.kotlin
+                cls.getMethod("run", RudderClient::class.java, String::class.java, String::class.java).invoke(kotlinClass.objectInstance, rudderClient, userId.text.toString(), this.localClassName)
+            }
+        }
+
         trackBtn.setOnClickListener {
             if (rudderClient == null) return@setOnClickListener
-
             rudderClient.track("some_test_event")
         }
 
